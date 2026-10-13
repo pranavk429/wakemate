@@ -157,8 +157,8 @@ public final class SessionManager: ObservableObject {
         sleepController: SleepController,
         powerMonitor: PowerMonitor,
         policyProvider: @escaping @MainActor () -> PowerPolicy = { PowerPolicy.load() },
-        clock: any SessionClock = SystemClock(),
-        ticker: any SessionTicker = TimerSessionTicker(),
+        clock: any SessionClock,
+        ticker: any SessionTicker,
         notificationCenter: NotificationCenter = .default
     ) {
         self.sleepController = sleepController
@@ -177,6 +177,22 @@ public final class SessionManager: ObservableObject {
         )
 
         setupObservations()
+    }
+
+    public convenience init(
+        sleepController: SleepController,
+        powerMonitor: PowerMonitor,
+        policyProvider: @escaping @MainActor () -> PowerPolicy = { PowerPolicy.load() },
+        notificationCenter: NotificationCenter = .default
+    ) {
+        self.init(
+            sleepController: sleepController,
+            powerMonitor: powerMonitor,
+            policyProvider: policyProvider,
+            clock: SystemClock(),
+            ticker: TimerSessionTicker(),
+            notificationCenter: notificationCenter
+        )
     }
 
     private func setupObservations() {

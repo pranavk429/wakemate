@@ -120,8 +120,12 @@ public final class PowerMonitor: ObservableObject {
     private var isStarted = false
     private let logger = Logger(subsystem: "com.wakemate.app", category: "PowerMonitor")
 
-    public init(provider: any PowerSourceProviding = IOKitPowerSourceProvider()) {
+    public init(provider: any PowerSourceProviding) {
         self.provider = provider
+    }
+
+    public convenience init() {
+        self.init(provider: IOKitPowerSourceProvider())
     }
 
     public func start() {
