@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Build & Test
+    runs-on: macos-14
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Show Swift & macOS version
+        run: |
+          sw_vers
+          swift --version
+
+      - name: Build Targets
+        run: swift build -v
+
+      - name: Run Test Suite
+        run: swift run WakeMateTests

@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Release App
+    runs-on: macos-14
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Application Bundle
+        run: |
+          chmod +x ./Scripts/build-app.sh
+          ./Scripts/build-app.sh release
+
+      - name: Package Release ZIP
+        run: |
+          cd build
+          zip -r -y WakeMate.zip WakeMate.app
+          shasum -a 256 WakeMate.zip > WakeMate.zip.sha256
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/WakeMate.zip
+            build/WakeMate.zip.sha256
+          generate_release_notes: true
