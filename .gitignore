@@ -1,0 +1,18 @@
+# Swift Package Manager & Builds
+.build/
+build/
+DerivedData/
+
+# Object files & archives
+*.o
+*.a
+*.dylib
+
+# macOS System Files
+.DS_Store
+*.swp
+*~
+
+# Xcode User Data
+*.xcuserdata/
+*.xcscmblueprint
