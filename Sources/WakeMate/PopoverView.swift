@@ -7,8 +7,6 @@ public struct PopoverView: View {
     @ObservedObject var power: PowerMonitor
     @ObservedObject var sleep: SleepController
 
-    @Environment(\.openSettings) private var openSettings
-
     public init(session: SessionManager, power: PowerMonitor, sleep: SleepController) {
         self.session = session
         self.power = power
@@ -199,8 +197,8 @@ public struct PopoverView: View {
     private var footerBar: some View {
         HStack {
             Button(action: {
-                openSettings()
                 NSApp.activate(ignoringOtherApps: true)
+                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
             }) {
                 Label("Settings…", systemImage: "gear")
             }
