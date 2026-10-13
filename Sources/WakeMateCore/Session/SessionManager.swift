@@ -32,7 +32,8 @@ public final class TimerSessionTicker: SessionTicker {
                 handler()
             }
         }
-        t.tolerance = 0.2
+        // Apple Silicon energy efficiency: coalesce wakeups with system events
+        t.tolerance = min(max(interval * 0.1, 0.5), 5.0)
         RunLoop.main.add(t, forMode: .common)
         timer = t
     }
@@ -247,7 +248,8 @@ public final class SessionManager: ObservableObject {
         remaining = targetDuration.seconds
         lastHeartbeatAt = now
 
-        ticker.start(interval: 1.0) { [weak self] in
+        let tickInterval: TimeInterval = (targetDuration == .indefinite) ? Self.heartbeatInterval : 1.0
+        ticker.start(interval: tickInterval) { [weak self] in
             self?.tick()
         }
 
